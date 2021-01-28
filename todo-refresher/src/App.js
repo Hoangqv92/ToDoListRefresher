@@ -22,24 +22,46 @@ function App() {
           SetFilteredTodos(todos);
           break;
     }
-  }
+  };
+
+  useEffect(() => {
+    getLocalTodos();
+  }, []);
   //USE EFFECT
   useEffect(() => {
     filterHandler();
+    saveLocalTodos();
   }, [todos, status]);
+  //Save to Local
+  const saveLocalTodos = () => {
+      localStorage.setItem('todos', JSON.stringify(todos));
+  };
+  const getLocalTodos = () => {
+    if(localStorage.getItem('todos') ===null) {
+      localStorage.setItem('todos', JSON.stringify([]));
+    } else {
+      let todoLocal = JSON.parse(localStorage.getItem("todos"))
+      setTodos(todoLocal);
+    }
+  };
+
   return (
     <div className="App">
       <header>
         <h1>Vinh's Todo List</h1>
       </header>
       <Form 
-      inputText={inputText} 
-      todos={todos} 
-      setTodos={setTodos} 
-      setInputText={setInputText}
-      setStatus={setStatus} 
+        inputText={inputText} 
+        todos={todos} 
+        setTodos={setTodos} 
+        setInputText={setInputText}
+        setStatus={setStatus} 
       />
-      <Todolist setTodos={setTodos} todos={todos} filteredTodos={filteredTodos}/>
+      <Todolist 
+        setTodos={setTodos} 
+        todos={todos} 
+        filteredTodos={filteredTodos}
+      />
     </div>
   );
 }
